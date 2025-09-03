@@ -1,230 +1,281 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>WeatherScope</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WeatherScope</title>
 
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <!-- Font Awesome -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
-
-  <style>
-    :root {
-      --bg-gradient: linear-gradient(to right, #141E30, #243B55);
-      --sidebar-bg: #0f172a;
-      --card-bg: #1e293b;
-      --text-color: #f1f5f9;
-      --muted-color: #94a3b8;
-    }
-
-    body.light-mode {
-      --bg-gradient: linear-gradient(to right, #e0eafc, #cfdef3);
-      --sidebar-bg: #ffffff;
-      --card-bg: #f8fafc;
-      --text-color: #1e293b;
-      --muted-color: #475569;
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--bg-gradient);
-      color: var(--text-color);
-      overflow-x: hidden;
-      transition: background 0.5s ease, color 0.5s ease;
-    }
-
-    /* Sidebar */
-    nav {
-      min-height: 100vh;
-      background: var(--sidebar-bg);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 1rem 0;
-      transition: background 0.5s ease;
-    }
-    nav a {
-      color: var(--muted-color);
-      font-size: 1.6rem;
-      margin: 1.2rem 0;
-      transition: all 0.3s;
-    }
-    nav a:hover {
-      color: #38bdf8;
-      transform: scale(1.2);
-    }
-
-    /* Main content */
-    main {
-      padding: 2rem;
-    }
-
-    /* Cards */
-    .card-custom {
-      background: var(--card-bg);
-      border: none;
-      border-radius: 18px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.5);
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-      transition: transform 0.3s, box-shadow 0.3s, background 0.5s ease;
-    }
-    .card-custom:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.7);
-    }
-
-    h1, h2, h4, h5 {
-      font-weight: 600;
-      color: var(--text-color);
-      transition: color 0.5s ease;
-    }
-    .muted {
-      color: var(--muted-color);
-      transition: color 0.5s ease;
-    }
-
-    /* Forecast - Hourly */
-    .forecast-hourly {
-      display: flex;
-      gap: 1rem;
-      overflow-x: auto;
-      padding-bottom: 0.5rem;
-    }
-    .forecast-hourly .hour {
-      background: #334155;
-      border-radius: 12px;
-      padding: 12px;
-      text-align: center;
-      min-width: 80px;
-      transition: background 0.5s ease;
-    }
-    body.light-mode .forecast-hourly .hour {
-      background: #e2e8f0;
-    }
-
-    /* Forecast - Daily */
-    .forecast-daily .day {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 0;
-      border-bottom: 1px solid #334155;
-    }
-    .forecast-daily .day:last-child {
-      border-bottom: none;
-    }
-
-    /* Dark/Light Mode Toggle */
-    .theme-toggle {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: var(--card-bg);
-      color: var(--text-color);
-      border: none;
-      padding: 10px 14px;
-      border-radius: 50%;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
-      cursor: pointer;
-      transition: background 0.5s ease, color 0.5s ease;
-      z-index: 1000;
-    }
-    .theme-toggle:hover {
-      transform: scale(1.1);
-    }
-  </style>
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="customization.css" />
 </head>
-<body>
-<div class="container-fluid">
-  <div class="row flex-nowrap">
 
-    <!-- Sidebar -->
-    <nav class="col-auto">
-      <a href="#"><i class="fas fa-cloud-sun"></i></a>
-      <a href="#"><i class="fas fa-city"></i></a>
-      <a href="#"><i class="fas fa-map"></i></a>
-      <a href="#"><i class="fas fa-cog"></i></a>
-    </nav>
+<body data-theme="dark">
+    <div class="container-fluid">
+        <div class="row flex-nowrap">
 
-    <!-- Main -->
-    <main class="col">
+            <!-- Sidebar -->
+            <nav class="col-auto">
+                <a href="#" id="weatherLink" class="active"><i class="fas fa-cloud-sun"></i></a>
+                <a href="#" id="newsLink"><i class="fas fa-newspaper"></i></a>
+                <a href="#"><i class="fas fa-map"></i></a>
+                <a href="#"><i class="fas fa-cog"></i></a>
+                <!-- Dark/Light Toggle -->
+                <button id="themeToggle" class="btn btn-sm mt-4 btn btn-warning"><i class="fas fa-moon"></i></button>
+            </nav>
 
-      <!-- Search -->
-      <div class="mb-4">
-        <input type="text" class="form-control form-control-lg" placeholder="Search for cities" />
-      </div>
+            <!-- Main Content -->
+            <main class="col">
 
-      <!-- Current Weather -->
-      <div class="card-custom d-flex flex-column flex-md-row align-items-center justify-content-between">
-        <div>
-          <h2>Madrid</h2>
-          <p class="muted">Chance of rain: 0%</p>
-          <h1>31°</h1>
+                <!-- 🌦 WEATHER SECTION -->
+                <section id="weatherSection">
+
+                    <!-- Search -->
+                    <div id="seachbarr" class="mb-4 ">
+                        <input type="text" id="cityInput" class="form-control form-control-lg"
+                            placeholder="Search for cities" />
+                    </div>
+
+                    <!-- Current Weather (Dynamic with API) -->
+                    <div class="card-custom d-flex flex-column flex-md-row align-items-center justify-content-between">
+                        <div>
+                            <h2 id="cityName">--</h2>
+                            <p class="muted" id="description">Loading...</p>
+                            <h1 id="temperature">--°C</h1>
+                        </div>
+                        <i id="weatherIcon" class="fas fa-sun fa-5x text-warning"></i>
+                    </div>
+
+                    <!-- Today's Forecast (Dummy for now) -->
+                    <div class="card-custom">
+                        <h5>Today's Forecast</h5>
+                        <div class="forecast-hourly mt-3">
+                            <div class="hour">
+                                <p>6 AM</p><i class="fas fa-cloud"></i>
+                                <p>25°</p>
+                            </div>
+                            <div class="hour">
+                                <p>9 AM</p><i class="fas fa-sun"></i>
+                                <p>28°</p>
+                            </div>
+                            <div class="hour">
+                                <p>12 PM</p><i class="fas fa-sun"></i>
+                                <p>33°</p>
+                            </div>
+                            <div class="hour">
+                                <p>3 PM</p><i class="fas fa-sun"></i>
+                                <p>34°</p>
+                            </div>
+                            <div class="hour">
+                                <p>6 PM</p><i class="fas fa-cloud-sun"></i>
+                                <p>32°</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Air Conditions -->
+                    <div class="card-custom">
+                        <h5>Air Conditions</h5>
+                        <div class="row text-center mt-3 g-3">
+                            <div class="col-6 col-md-3">
+                                <p class="muted">Real Feel</p>
+                                <h4>30°</h4>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <p class="muted">Wind</p>
+                                <h4>0.2 km/h</h4>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <p class="muted">Chance of Rain</p>
+                                <h4>0%</h4>
+                            </div>
+                            <div class="col-6 col-md-3">
+                                <p class="muted">UV Index</p>
+                                <h4>3</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 7-Day Forecast (Dummy for now) -->
+                    <div class="card-custom forecast-daily">
+                        <h5>7-Day Forecast</h5>
+                        <div class="day"><span>Today</span><i class="fas fa-sun text-warning"></i><span>34° / 27°</span>
+                        </div>
+                        <div class="day"><span>Tue</span><i class="fas fa-sun text-warning"></i><span>33° / 25°</span>
+                        </div>
+                        <div class="day"><span>Wed</span><i class="fas fa-sun text-warning"></i><span>32° / 24°</span>
+                        </div>
+                        <div class="day"><span>Thu</span><i class="fas fa-cloud text-secondary"></i><span>30° /
+                                22°</span></div>
+                        <div class="day"><span>Fri</span><i class="fas fa-cloud text-secondary"></i><span>29° /
+                                21°</span></div>
+                        <div class="day"><span>Sat</span><i class="fas fa-cloud-showers-heavy text-info"></i><span>28° /
+                                20°</span></div>
+                        <div class="day"><span>Sun</span><i class="fas fa-bolt text-warning"></i><span>27° / 19°</span>
+                        </div>
+                    </div>
+
+                </section>
+
+                <!-- 📰 NEWS SECTION -->
+                <section id="newsSection" style="display: none;">
+                    <h3 id="newsHeading" class="mb-4">Top News</h3>
+                    <div class="row g-4">
+                        <div class="col-md-6 col-lg-4">
+                            <div class="news-card">
+                                <img src="https://picsum.photos/400/200?random=1" alt="News Image">
+                                <div class="news-card-body">
+                                    <p class="news-category">World</p>
+                                    <h5 class="news-title">Global Weather Disruptions</h5>
+                                    <p class="news-desc">Heavy storms and flooding continue to affect regions across
+                                        Europe.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4">
+                            <div class="news-card">
+                                <img src="https://picsum.photos/400/200?random=2" alt="News Image">
+                                <div class="news-card-body">
+                                    <p class="news-category">Climate</p>
+                                    <h5 class="news-title">Rising Sea Levels Threaten Cities</h5>
+                                    <p class="news-desc">Experts warn that coastal cities may face unprecedented
+                                        flooding.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4">
+                            <div class="news-card">
+                                <img src="https://picsum.photos/400/200?random=3" alt="News Image">
+                                <div class="news-card-body">
+                                    <p class="news-category">Local</p>
+                                    <h5 class="news-title">Karachi Faces Heatwave</h5>
+                                    <p class="news-desc">Temperatures in Karachi are soaring to record highs.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
         </div>
-        <i class="fas fa-sun fa-5x text-warning"></i>
-      </div>
+    </div>
 
-      <!-- Today's Forecast -->
-      <div class="card-custom">
-        <h5>Today's Forecast</h5>
-        <div class="forecast-hourly mt-3">
-          <div class="hour"><p>6 AM</p><i class="fas fa-cloud"></i><p>25°</p></div>
-          <div class="hour"><p>9 AM</p><i class="fas fa-sun"></i><p>28°</p></div>
-          <div class="hour"><p>12 PM</p><i class="fas fa-sun"></i><p>33°</p></div>
-          <div class="hour"><p>3 PM</p><i class="fas fa-sun"></i><p>34°</p></div>
-          <div class="hour"><p>6 PM</p><i class="fas fa-cloud-sun"></i><p>32°</p></div>
-        </div>
-      </div>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-      <!-- Air Conditions -->
-      <div class="card-custom">
-        <h5>Air Conditions</h5>
-        <div class="row text-center mt-3 g-3">
-          <div class="col-6 col-md-3"><p class="muted">Real Feel</p><h4>30°</h4></div>
-          <div class="col-6 col-md-3"><p class="muted">Wind</p><h4>0.2 km/h</h4></div>
-          <div class="col-6 col-md-3"><p class="muted">Chance of Rain</p><h4>0%</h4></div>
-          <div class="col-6 col-md-3"><p class="muted">UV Index</p><h4>3</h4></div>
-        </div>
-      </div>
+    <script>
+        // Sidebar toggle between Weather & News
+        const weatherLink = document.getElementById('weatherLink');
+        const newsLink = document.getElementById('newsLink');
+        const weatherSection = document.getElementById('weatherSection');
+        const newsSection = document.getElementById('newsSection');
 
-      <!-- 7-Day Forecast -->
-      <div class="card-custom forecast-daily">
-        <h5>7-Day Forecast</h5>
-        <div class="day"><span>Today</span><i class="fas fa-sun text-warning"></i><span>34° / 27°</span></div>
-        <div class="day"><span>Tue</span><i class="fas fa-sun text-warning"></i><span>33° / 25°</span></div>
-        <div class="day"><span>Wed</span><i class="fas fa-sun text-warning"></i><span>32° / 24°</span></div>
-        <div class="day"><span>Thu</span><i class="fas fa-cloud text-secondary"></i><span>30° / 22°</span></div>
-        <div class="day"><span>Fri</span><i class="fas fa-cloud text-secondary"></i><span>29° / 21°</span></div>
-        <div class="day"><span>Sat</span><i class="fas fa-cloud-showers-heavy text-info"></i><span>28° / 20°</span></div>
-        <div class="day"><span>Sun</span><i class="fas fa-bolt text-warning"></i><span>27° / 19°</span></div>
-      </div>
+        weatherLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            weatherSection.style.display = 'block';
+            newsSection.style.display = 'none';
+            weatherLink.classList.add('active');
+            newsLink.classList.remove('active');
+        });
 
-    </main>
-  </div>
-</div>
+        newsLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            weatherSection.style.display = 'none';
+            newsSection.style.display = 'block';
+            newsLink.classList.add('active');
+            weatherLink.classList.remove('active');
+        });
 
-<!-- Dark/Light Toggle -->
-<button class="theme-toggle" id="themeToggle">
-  <i class="fas fa-moon"></i>
-</button>
+        // Dark/Light Mode
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.dataset.theme =
+                document.body.dataset.theme === 'dark' ? 'light' : 'dark';
+            themeToggle.innerHTML =
+                document.body.dataset.theme === 'dark'
+                    ? '<i class="fas fa-moon"></i>'
+                    : '<i class="fas fa-sun"></i>';
+        });
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  const toggleBtn = document.getElementById('themeToggle');
-  const body = document.body;
+        // Weather API
+        const apiKey = "Put your API key here to make it workk"; // Replace with your API key
+        const cityInput = document.getElementById("cityInput");
 
-  toggleBtn.addEventListener('click', () => {
-    body.classList.toggle('light-mode');
-    toggleBtn.innerHTML = body.classList.contains('light-mode')
-      ? '<i class="fas fa-sun"></i>'
-      : '<i class="fas fa-moon"></i>';
-  });
-</script>
+        async function getWeather(city) {
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+            const response = await fetch(url);
+            const data = await response.json();
+
+            if (data.cod !== 200) {
+                alert("City not found!");
+                return;
+            }
+
+            document.getElementById("cityName").textContent = data.name;
+            // ROUNDING OFF THE WEATHER DIGITSSS
+            document.getElementById("temperature").textContent = `${Math.round(data.main.temp)}°C`;
+
+            document.getElementById("description").textContent = data.weather[0].description;
+
+            // Update icon dynamically
+            const weatherIcon = document.getElementById("weatherIcon");
+            const mainWeather = data.weather[0].main.toLowerCase();
+            if (mainWeather.includes("cloud")) weatherIcon.className = "fas fa-cloud fa-5x text-secondary";
+            else if (mainWeather.includes("rain")) weatherIcon.className = "fas fa-cloud-showers-heavy fa-5x text-info";
+            else if (mainWeather.includes("storm")) weatherIcon.className = "fas fa-bolt fa-5x text-warning";
+            else weatherIcon.className = "fas fa-sun fa-5x text-warning";
+        }
+
+        // Default load Karachi
+        getWeather("Karachi");
+
+        // Search functionality
+        cityInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                getWeather(cityInput.value);
+            }
+        });
+        const newsApiKey = "Put your API key here to make it workkkk"; // put your News API key
+        const newsUrl = `https://newsapi.org/v2/top-headlines?country=us&apiKey=${newsApiKey}`;
+
+        async function getNews() {
+            try {
+                const response = await fetch(newsUrl);
+                const data = await response.json();
+                console.log(data); // check in browser console
+
+                const newsSection = document.querySelector("#newsSection .row");
+                newsSection.innerHTML = ""; // clear old hardcoded cards
+
+                data.articles.slice(0, 6).forEach(article => {
+                    const card = `
+                <div class="col-md-6 col-lg-4">
+                    <div class="news-card">
+                        <img src="${article.urlToImage || 'https://picsum.photos/400/200'}" alt="News Image">
+                        <div class="news-card-body">
+                            <p class="news-category">${article.source.name || "News"}</p>
+                            <h5 class="news-title">${article.title}</h5>
+                            <p class="news-desc">${article.description || ""}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+                    newsSection.innerHTML += card;
+                });
+            } catch (error) {
+                console.error("Error fetching news:", error);
+            }
+        }
+
+        getNews();
+
+    </script>
 </body>
+
 </html>
